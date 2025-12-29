@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Heart, Moon, Shuffle } from 'lucide-react';
+import { Heart, Moon, Shuffle, Crown } from 'lucide-react';
 import Countdown from './components/Countdown';
 import MusicPlayer from './components/MusicPlayer';
 import DailyQuote from './components/DailyQuote';
 import EmotionalStatus from './components/EmotionalStatus';
-import { FOOTER_QUOTES, TIME_GREETINGS, HIDDEN_MESSAGES, TARGET_DATE, THEMES } from './constants';
+import { FOOTER_QUOTES, PURPLE_QUOTES, TIME_GREETINGS, HIDDEN_MESSAGES, TARGET_DATE, THEMES } from './constants';
 
 const App: React.FC = () => {
   const [hasEntered, setHasEntered] = useState(false);
@@ -17,6 +17,9 @@ const App: React.FC = () => {
   const [currentFooterQuote, setCurrentFooterQuote] = useState('');
 
   const theme = THEMES[currentThemeIndex];
+  
+  // Lógica para detectar se é o tema exclusivo (Roxo)
+  const isPurpleTheme = theme.name === "O Mundo Dela";
 
   // Initialize random footer quote on mount
   useEffect(() => {
@@ -29,15 +32,17 @@ const App: React.FC = () => {
     e.stopPropagation();
     
     // Rotate Theme
-    setCurrentThemeIndex((prev) => (prev + 1) % THEMES.length);
+    const nextIndex = (currentThemeIndex + 1) % THEMES.length;
+    setCurrentThemeIndex(nextIndex);
     
-    // Pick new random quote (ensure it's different from current if possible)
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * FOOTER_QUOTES.length);
-    } while (FOOTER_QUOTES[newIndex] === currentFooterQuote && FOOTER_QUOTES.length > 1);
+    // Check if next theme is the Exclusive Purple theme
+    const nextIsPurple = THEMES[nextIndex].name === "O Mundo Dela";
     
-    setCurrentFooterQuote(FOOTER_QUOTES[newIndex]);
+    // Pick quote based on theme
+    const sourceArray = nextIsPurple ? PURPLE_QUOTES : FOOTER_QUOTES;
+    const randomIndex = Math.floor(Math.random() * sourceArray.length);
+    
+    setCurrentFooterQuote(sourceArray[randomIndex]);
   };
 
   // 1. Time Logic for Greetings & Night Mode (Brasilia UTC-3)
@@ -51,10 +56,11 @@ const App: React.FC = () => {
   }, [currentTime]);
 
   const timeGreeting = useMemo(() => {
+    if (isPurpleTheme) return "O roxo te veste tão bem quanto a minha saudade.";
     if (brasiliaHour >= 5 && brasiliaHour < 12) return TIME_GREETINGS.morning;
     if (brasiliaHour >= 12 && brasiliaHour < 18) return TIME_GREETINGS.afternoon;
     return TIME_GREETINGS.night;
-  }, [brasiliaHour]);
+  }, [brasiliaHour, isPurpleTheme]);
 
   const isNight = brasiliaHour >= 18 || brasiliaHour < 5;
 
@@ -128,8 +134,8 @@ const App: React.FC = () => {
 
       {/* Improved Heartbeat Background Effect */}
       <div className="fixed inset-0 pointer-events-none transition-all duration-1000">
-         {/* Central beating heart core */}
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] md:w-[25vw] md:h-[25vw] rounded-full blur-[100px] animate-heartbeat-bg ${theme.accentBg}`}></div>
+         {/* Central beating heart core - Larger and glowier if Purple Theme */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full animate-heartbeat-bg ${theme.accentBg} ${isPurpleTheme ? 'w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] blur-[120px] opacity-40' : 'w-[40vw] h-[40vw] md:w-[25vw] md:h-[25vw] blur-[100px]'}`}></div>
         
         {/* Secondary ambient glow */}
         <div className={`absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full blur-[150px] pulse-slow opacity-20 ${theme.accentBg}`} style={{ animationDelay: '2s' }}></div>
@@ -157,33 +163,48 @@ const App: React.FC = () => {
             {/* Header */}
             <header className="mb-8 text-center animate-in slide-in-from-top duration-1000">
             <div className={`inline-flex items-center gap-2 mb-4 ${theme.accentText} opacity-80`}>
-                {/* 3. Heartbeat Icon */}
-                <Heart size={16} fill="currentColor" className="heartbeat-icon" />
+                {/* 3. Icon: Heart usually, Crown if Purple Theme */}
+                {isPurpleTheme ? (
+                  <Crown size={20} fill="currentColor" className="heartbeat-icon text-yellow-500/80 drop-shadow-glow" />
+                ) : (
+                  <Heart size={16} fill="currentColor" className="heartbeat-icon" />
+                )}
             </div>
-            <h1 className="font-cinzel text-3xl md:text-5xl tracking-widest mb-2">
+            
+            {/* Title changes based on Theme */}
+            {isPurpleTheme ? (
+              <h1 className="font-serif-display italic text-4xl md:text-6xl tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-fuchsia-200 to-purple-200 animate-pulse">
+                Minha Anna
+              </h1>
+            ) : (
+              <h1 className="font-cinzel text-3xl md:text-5xl tracking-widest mb-2">
                 ANNA BEATRIZ
-            </h1>
+              </h1>
+            )}
+
             <p className={`font-light ${theme.textMuted} tracking-[0.3em] text-xs md:text-sm uppercase mb-6`}>
                 {timeGreeting}
             </p>
             </header>
 
             {/* Countdown Section */}
-            <section className="w-full max-w-4xl mx-auto backdrop-blur-sm bg-black/10 border border-white/5 rounded-2xl p-6 md:p-12 shadow-2xl shadow-black/50">
+            <section className={`w-full max-w-4xl mx-auto backdrop-blur-sm rounded-2xl p-6 md:p-12 shadow-2xl transition-all duration-1000 ${isPurpleTheme ? 'bg-fuchsia-950/20 border border-purple-500/20 shadow-purple-900/30' : 'bg-black/10 border border-white/5 shadow-black/50'}`}>
             <Countdown />
             
             <div className="flex flex-col items-center mt-8 gap-4">
                 <div className="text-center">
-                    <p className={`text-xs ${theme.textMuted} uppercase tracking-widest mb-1`}>Data oficial</p>
+                    <p className={`text-xs ${theme.textMuted} uppercase tracking-widest mb-1`}>
+                      {isPurpleTheme ? "Nosso reencontro real" : "Data oficial"}
+                    </p>
                     <p className={`font-serif-display italic opacity-80`}>07 de Janeiro de 2026</p>
                 </div>
 
-                {/* 5. Nights Counter (Only visible at night) */}
-                {isNight && (
+                {/* 5. Nights Counter (Only visible at night OR if it's the Purple Theme because it's emotional) */}
+                {(isNight || isPurpleTheme) && (
                     <div className={`mt-4 flex items-center gap-2 ${theme.accentText} animate-in fade-in duration-1000 opacity-60`}>
                         <Moon size={14} />
                         <span className="text-sm font-serif-display italic tracking-wide">
-                            Faltam {nightsLeft} noites solitárias
+                            Faltam {nightsLeft} noites {isPurpleTheme ? "sonhando com você" : "solitárias"}
                         </span>
                     </div>
                 )}

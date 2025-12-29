@@ -22,6 +22,15 @@ export const THEMES: Theme[] = [
     selection: "selection:bg-red-900/40 selection:text-red-100"
   },
   {
+    name: "O Mundo Dela", // O TEMA EXCLUSIVO
+    bgClass: "bg-[#0c0214]", // Deepest Purple
+    accentText: "text-purple-400",
+    accentBg: "bg-fuchsia-800", // Mais vibrante para o background
+    textMain: "text-purple-50",
+    textMuted: "text-purple-300/60",
+    selection: "selection:bg-purple-900/60 selection:text-purple-100"
+  },
+  {
     name: "Profundidade",
     bgClass: "bg-[#020210]", // Deep Blue
     accentText: "text-blue-500",
@@ -29,15 +38,6 @@ export const THEMES: Theme[] = [
     textMain: "text-blue-50",
     textMuted: "text-blue-300/60",
     selection: "selection:bg-blue-900/40 selection:text-blue-100"
-  },
-  {
-    name: "Místico",
-    bgClass: "bg-[#0a020f]", // Deep Purple
-    accentText: "text-purple-500",
-    accentBg: "bg-purple-600",
-    textMain: "text-purple-50",
-    textMuted: "text-purple-300/60",
-    selection: "selection:bg-purple-900/40 selection:text-purple-100"
   },
   {
     name: "Nostalgia",
@@ -57,6 +57,18 @@ export const THEMES: Theme[] = [
     textMuted: "text-emerald-300/60",
     selection: "selection:bg-emerald-900/40 selection:text-emerald-100"
   }
+];
+
+// Frases exclusivas para quando estiver no tema Roxo
+export const PURPLE_QUOTES: string[] = [
+  "No seu tom favorito, o meu mundo ganha cor.",
+  "Você é a realeza que habita meus pensamentos.",
+  "Tudo fica mais bonito na cor que você ama.",
+  "Roxo é a cor da saudade que tenho de você.",
+  "Minha ametista preciosa, conto os dias.",
+  "O universo conspirou para te dar essa cor.",
+  "Seu gosto define a beleza deste lugar.",
+  "Na sua cor, encontro a paz que sua ausência tirou."
 ];
 
 export const QUOTES: string[] = [
