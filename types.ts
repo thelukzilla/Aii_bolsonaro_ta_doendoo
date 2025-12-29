@@ -15,3 +15,13 @@ export enum PlayerState {
   PLAYING = 'PLAYING',
   PAUSED = 'PAUSED',
 }
+
+export interface Theme {
+  name: string;
+  bgClass: string;      // Background color class
+  accentText: string;   // For icons/highlights
+  accentBg: string;     // For blobs/gradients
+  textMain: string;     // Main text color
+  textMuted: string;    // Secondary text color
+  selection: string;    // Selection color
+}
