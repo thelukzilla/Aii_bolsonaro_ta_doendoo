@@ -44,3 +44,21 @@ export const QUOTES: string[] = [
   "Espero o dia em que o 'tchau' será apenas um 'até logo'.",
   "Te esperar não é uma escolha, é uma necessidade da minha alma."
 ];
+
+export const FOOTER_QUOTES: string[] = [
+  "Algumas pessoas não se esquecem. Se esperam.",
+  "O amor sabe contar as horas até o reencontro.",
+  "Distância é apenas um detalhe quando a alma está perto.",
+  "Onde quer que você esteja, estou com você.",
+  "O tempo não apaga o que o coração gravou.",
+  "Minha saudade tem nome e sobrenome.",
+  "Em breve, o silêncio será preenchido por nós."
+];
+
+export const TIME_GREETINGS = {
+  morning: "Que seu dia comece pensando em nós.",
+  afternoon: "A tarde passa devagar sem você aqui.",
+  night: "A noite é quando a saudade mais grita."
+};
+
+export const HIDDEN_MESSAGE = "Eu te amo em todos os tempos verbais, principalmente no futuro.";

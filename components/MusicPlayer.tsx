@@ -5,17 +5,25 @@ import { Play, Pause, SkipForward, SkipBack, Music2 } from 'lucide-react';
 
 interface MusicPlayerProps {
   autoStart?: boolean;
+  isSilenceMode?: boolean;
 }
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
+const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false, isSilenceMode = false }) => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  // Initial state logic: if autoStart is true, we play.
   const [playerState, setPlayerState] = useState<PlayerState>(autoStart ? PlayerState.PLAYING : PlayerState.PAUSED);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   
   const currentSong = PLAYLIST[currentSongIndex];
 
+  // Handle Silence Mode
+  useEffect(() => {
+    if (isSilenceMode) {
+      setPlayerState(PlayerState.PAUSED);
+    }
+  }, [isSilenceMode]);
+
   // Effect to control Play/Pause via postMessage API
-  // This prevents the iframe from reloading completely on pause/play
   useEffect(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       const action = playerState === PlayerState.PLAYING ? 'playVideo' : 'pauseVideo';
@@ -27,15 +35,18 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
   }, [playerState]);
 
   const togglePlay = () => {
+    if (isSilenceMode) return; // Disable controls in silence mode if desired, or allow user to break silence
     setPlayerState(prev => prev === PlayerState.PLAYING ? PlayerState.PAUSED : PlayerState.PLAYING);
   };
 
   const nextSong = () => {
+    if (isSilenceMode) return;
     setCurrentSongIndex((prev) => (prev + 1) % PLAYLIST.length);
     setPlayerState(PlayerState.PLAYING);
   };
 
   const prevSong = () => {
+    if (isSilenceMode) return;
     setCurrentSongIndex((prev) => (prev - 1 + PLAYLIST.length) % PLAYLIST.length);
     setPlayerState(PlayerState.PLAYING);
   };
@@ -43,15 +54,28 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
   // Construct URL with enablejsapi to allow postMessage control
   const embedUrl = `https://www.youtube.com/embed/${currentSong.id}?enablejsapi=1&autoplay=1&controls=0&loop=1&playlist=${currentSong.id}&origin=${window.location.origin}`;
 
+  // If in silence mode, we can hide the player completely or just disable interaction.
+  // The requirements say "Pausar música" which is handled by the useEffect above.
+  
+  if (isSilenceMode) {
+    return (
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+            <iframe 
+              ref={iframeRef}
+              width="100%" 
+              height="100%" 
+              src={embedUrl}
+              title="audio-player" 
+              allow="autoplay; encrypted-media"
+            ></iframe>
+        </div>
+    );
+  }
+
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-slate-950/80 backdrop-blur-md border-t border-slate-800/50 p-4 z-40 transition-all duration-500">
+    <div className="fixed bottom-0 left-0 w-full bg-slate-950/80 backdrop-blur-md border-t border-slate-800/50 p-4 z-40 transition-all duration-500 animate-in slide-in-from-bottom">
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
         
-        {/* 
-            CRITICAL FIX: Do not use 'hidden' or 'display: none'. 
-            YouTube players often stop working if hidden.
-            Instead, use opacity 0 and pointer-events none with a 1px size.
-        */}
         <div style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', overflow: 'hidden' }}>
             <iframe 
               ref={iframeRef}

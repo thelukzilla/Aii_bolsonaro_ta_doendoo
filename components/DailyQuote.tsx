@@ -3,13 +3,13 @@ import { QUOTES } from '../constants';
 
 const DailyQuote: React.FC = () => {
   const quote = useMemo(() => {
-    // Calculate days since a fixed epoch (e.g., Jan 1, 1970) to ensure rotation every 24h
+    // Calculate 8-hour blocks since a fixed epoch (e.g., Jan 1, 1970)
     const now = new Date();
-    // Use UTC to ensure consistency across refresh, or local if preferred. 
-    // Using Brasilia time offset logic roughly implies we want it to change day-by-day.
-    // A simple day index works well.
-    const dayIndex = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
-    return QUOTES[dayIndex % QUOTES.length];
+    
+    // Divide by (1000ms * 60s * 60m * 8h) to change every 8 hours
+    const blockIndex = Math.floor(now.getTime() / (1000 * 60 * 60 * 8));
+    
+    return QUOTES[blockIndex % QUOTES.length];
   }, []);
 
   return (
@@ -19,7 +19,7 @@ const DailyQuote: React.FC = () => {
         {quote}
       </p>
       <div className="w-16 h-[1px] bg-red-900/30 mx-auto mt-6"></div>
-      <p className="text-xs text-slate-600 mt-3 uppercase tracking-widest">Pensamento do Dia</p>
+      <p className="text-xs text-slate-600 mt-3 uppercase tracking-widest">Pensamento do Momento</p>
     </div>
   );
 };
