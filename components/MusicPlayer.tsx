@@ -7,18 +7,24 @@ interface MusicPlayerProps {
   autoStart?: boolean;
 }
 
-// We cannot use the full YT Iframe API package, so we use a controlled iframe approach 
-// or a simple simulated visual. To make it functional, we embed a hidden iframe.
 const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [playerState, setPlayerState] = useState<PlayerState>(autoStart ? PlayerState.PLAYING : PlayerState.PAUSED);
-  const [volume, setVolume] = useState(50);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   
   const currentSong = PLAYLIST[currentSongIndex];
 
-  // YouTube Embed URL construction
-  // autoplay=1 only works if user interacted with DOM, handled by App's "Enter" overlay
-  const embedUrl = `https://www.youtube.com/embed/${currentSong.id}?enablejsapi=1&autoplay=${playerState === PlayerState.PLAYING ? 1 : 0}&controls=0&loop=1`;
+  // Effect to control Play/Pause via postMessage API
+  // This prevents the iframe from reloading completely on pause/play
+  useEffect(() => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      const action = playerState === PlayerState.PLAYING ? 'playVideo' : 'pauseVideo';
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: action, args: [] }), 
+        '*'
+      );
+    }
+  }, [playerState]);
 
   const togglePlay = () => {
     setPlayerState(prev => prev === PlayerState.PLAYING ? PlayerState.PAUSED : PlayerState.PLAYING);
@@ -34,24 +40,28 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ autoStart = false }) => {
     setPlayerState(PlayerState.PLAYING);
   };
 
+  // Construct URL with enablejsapi to allow postMessage control
+  const embedUrl = `https://www.youtube.com/embed/${currentSong.id}?enablejsapi=1&autoplay=1&controls=0&loop=1&playlist=${currentSong.id}&origin=${window.location.origin}`;
+
   return (
     <div className="fixed bottom-0 left-0 w-full bg-slate-950/80 backdrop-blur-md border-t border-slate-800/50 p-4 z-40 transition-all duration-500">
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
         
-        {/* Hidden Iframe for Audio */}
-        {/* Note: This is a "hacky" way to do audio-only YT without backend. 
-            For a real production app, one would use the YouTube IFrame Player API properly 
-            to control state without reloading the iframe. Here we rely on React key updates for simplicity in a single file structure. */}
-        <div className="hidden">
-           {playerState === PlayerState.PLAYING && (
-              <iframe 
-                width="1" 
-                height="1" 
-                src={`https://www.youtube.com/embed/${currentSong.id}?autoplay=1&loop=1&playlist=${currentSong.id}`} 
-                title="audio-player" 
-                allow="autoplay"
-              ></iframe>
-           )}
+        {/* 
+            CRITICAL FIX: Do not use 'hidden' or 'display: none'. 
+            YouTube players often stop working if hidden.
+            Instead, use opacity 0 and pointer-events none with a 1px size.
+        */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '1px', height: '1px', opacity: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+            <iframe 
+              ref={iframeRef}
+              width="100%" 
+              height="100%" 
+              src={embedUrl}
+              title="audio-player" 
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
         </div>
 
         {/* Song Info */}
