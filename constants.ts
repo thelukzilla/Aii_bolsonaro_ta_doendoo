@@ -1,4 +1,4 @@
-import { Song, Theme } from './types';
+import { Song, Theme, CardData } from './types';
 
 export const TARGET_DATE = '2026-01-07T00:00:00-03:00'; // Brasilia Time
 
@@ -22,7 +22,7 @@ export const THEMES: Theme[] = [
     selection: "selection:bg-red-900/40 selection:text-red-100"
   },
   {
-    name: "O Mundo Dela", // O TEMA EXCLUSIVO
+    name: "O Mundo Dela", // O ÚNICO TEMA ROXO
     bgClass: "bg-[#0c0214]", // Deepest Purple
     accentText: "text-purple-400",
     accentBg: "bg-fuchsia-800", // Mais vibrante para o background
@@ -56,19 +56,205 @@ export const THEMES: Theme[] = [
     textMain: "text-emerald-50",
     textMuted: "text-emerald-300/60",
     selection: "selection:bg-emerald-900/40 selection:text-emerald-100"
+  },
+  {
+    name: "Elegância",
+    bgClass: "bg-[#020617]", // Deep Slate/Gray
+    accentText: "text-slate-400",
+    accentBg: "bg-slate-500",
+    textMain: "text-slate-50",
+    textMuted: "text-slate-400/60",
+    selection: "selection:bg-slate-800 selection:text-slate-100"
+  },
+  {
+    name: "Intimidade",
+    bgClass: "bg-[#1f0208]", // Dark Pink/Rose
+    accentText: "text-pink-500",
+    accentBg: "bg-pink-600",
+    textMain: "text-pink-50",
+    textMuted: "text-pink-300/60",
+    selection: "selection:bg-pink-900/40 selection:text-pink-100"
+  },
+  {
+    name: "Luxúria",
+    bgClass: "bg-[#160800]", // Dark Amber/Brown
+    accentText: "text-amber-500",
+    accentBg: "bg-amber-600",
+    textMain: "text-amber-50",
+    textMuted: "text-amber-300/60",
+    selection: "selection:bg-amber-900/40 selection:text-amber-100"
+  },
+  {
+    name: "Obsessão",
+    bgClass: "bg-[#011210]", // Deep Teal
+    accentText: "text-teal-500",
+    accentBg: "bg-teal-600",
+    textMain: "text-teal-50",
+    textMuted: "text-teal-300/60",
+    selection: "selection:bg-teal-900/40 selection:text-teal-100"
+  },
+  {
+    name: "Eclipse",
+    bgClass: "bg-[#050505]", // Pure Dark/Zinc
+    accentText: "text-zinc-400",
+    accentBg: "bg-zinc-600",
+    textMain: "text-zinc-100",
+    textMuted: "text-zinc-500",
+    selection: "selection:bg-zinc-800 selection:text-white"
+  },
+  {
+    name: "Instinto",
+    bgClass: "bg-[#0a1201]", // Dark Lime
+    accentText: "text-lime-500",
+    accentBg: "bg-lime-600",
+    textMain: "text-lime-50",
+    textMuted: "text-lime-300/60",
+    selection: "selection:bg-lime-900/40 selection:text-lime-100"
+  },
+  {
+    name: "Paraíso",
+    bgClass: "bg-[#020e14]", // Deep Sky/Cyan
+    accentText: "text-cyan-500",
+    accentBg: "bg-cyan-600",
+    textMain: "text-cyan-50",
+    textMuted: "text-cyan-300/60",
+    selection: "selection:bg-cyan-900/40 selection:text-cyan-100"
   }
 ];
 
-// Frases exclusivas para quando estiver no tema Roxo
+// Cards exibidos após o fim do contador (Total: 16 cards)
+export const FINAL_CARDS: CardData[] = [
+  {
+    id: 1,
+    title: "O Começo",
+    text: "Dia 1. A cidade acordou igual, mas claramente menos interessante."
+  },
+  {
+    id: 2,
+    title: "Street Food",
+    text: "Comer hambúrguer sozinho é possível. Gostoso não é. Você faz falta até na gordura."
+  },
+  {
+    id: 3,
+    title: "A Regra",
+    text: "Pizza se come com a mão. Conversa boa se prolonga. E você nunca respeita o horário de ir embora."
+  },
+  {
+    id: 4,
+    title: "Vinho",
+    text: "Uma taça de vinho e você vira argumento forte. Eu perco qualquer debate."
+  },
+  {
+    id: 5,
+    title: "Fofoca",
+    text: "Fofoca não é lazer. É atividade social séria. Você trata como profissão."
+  },
+  {
+    id: 6,
+    title: "Detetive",
+    text: "Você não ouve histórias. Você cruza dados. E geralmente acerta."
+  },
+  {
+    id: 7,
+    title: "Ícone",
+    text: "Você se define como 🤡 mas o mundo reage como se fosse protagonista."
+  },
+  {
+    id: 8,
+    title: "Clima Ideal",
+    text: "Ambiente abafado, banheiro duvidoso e gente suada falando alto? Você vai embora antes do segundo gole."
+  },
+  {
+    id: 9,
+    title: "Conforto",
+    text: "Cheiro de roupa limpa é seu equivalente a paz interior."
+  },
+  {
+    id: 10,
+    title: "Eficiência",
+    text: "Áudio longo é falta de educação. Você resolve no 2x e segue a vida."
+  },
+  {
+    id: 11,
+    title: "Cabeça Perigosa",
+    text: "Palavras cruzadas, lógica afiada e um radar de mentira ativo 24h."
+  },
+  {
+    id: 12,
+    title: "Território",
+    text: "Maletta, Sapucaí, Mercado Novo… qualquer lugar vira casa quando você começa a falar."
+  },
+  {
+    id: 13,
+    title: "Diva",
+    text: "Você chega no horário. O mundo que se atrasa."
+  },
+  {
+    id: 14,
+    title: "Valores",
+    text: "Gente grossa com garçom é o único tipo de red flag que você não ignora."
+  },
+  {
+    id: 15,
+    title: "Segredo",
+    text: "No meio do caos, do deboche e da falação… no fim, você só queria um cafuné."
+  },
+  {
+    id: 16,
+    title: "Final",
+    text: "Os dias acabaram. A distância perdeu. Agora vem exercer o direito à falação presencial."
+  }
+];
+
+// Frases exclusivas para o momento FINAL (Pós-Contador)
+export const FINALE_QUOTES: string[] = [
+  "O tempo de espera acabou. Agora é só tempo de viver.",
+  "Chega de contar dias. Vamos contar momentos.",
+  "A melhor notificação do mundo: 'Estou aqui'.",
+  "O abraço que valeu cada segundo de espera.",
+  "Fim da distância. Início da nossa vida.",
+  "O relógio parou para a gente começar.",
+  "Não existe mais 'lá'. Agora tudo é 'aqui'.",
+  "Finalmente, a tela virou pele.",
+  "Nós vencemos a geografia.",
+  "O som da sua voz sem delay é minha música favorita.",
+  "Promessa cumprida. Estamos juntos.",
+  "A saudade virou presença."
+];
+
+// Frases exclusivas para quando estiver no tema Roxo (Durante a espera)
 export const PURPLE_QUOTES: string[] = [
+  "Roxo é quando o mistério resolve aparecer.",
+  "Tem coisa que só o roxo explica.",
+  "Roxo não grita — envolve.",
+  "Elegância também pode ser intensa.",
+  "O roxo não pede atenção. Ele toma.",
+  "Tem clima que é claramente roxo.",
+  "Nem escuro, nem claro. Profundo.",
+  "Roxo é a cor de quem sabe demais.",
+  "Algumas intenções combinam com luz baixa.",
+  "Roxo não é fase. É identidade.",
+  "Entre o desejo e o controle, escolhi o roxo.",
+  "Roxo é quando o silêncio fica interessante.",
+  "Tem noites que pedem essa cor.",
+  "O roxo não é óbvio. É escolha.",
+  "Mistério também pode ser confortável.",
+  "Roxo combina com quem não se explica.",
+  "Tem beleza que não quer ser entendida.",
+  "Roxo é charme com segundas intenções.",
+  "Não é drama. É profundidade.",
+  "O roxo chega antes da decisão.",
+  "Algumas vontades têm essa cor.",
+  "Roxo é quando a calma esconde fogo.",
+  "Elegância com um toque de perigo.",
+  "Roxo não passa despercebido — permanece.",
+  "Se fosse um sentimento, seria roxo.",
+  
+  // Originais mantidas para consistência
   "No seu tom favorito, o meu mundo ganha cor.",
   "Você é a realeza que habita meus pensamentos.",
   "Tudo fica mais bonito na cor que você ama.",
-  "Roxo é a cor da saudade que tenho de você.",
-  "Minha ametista preciosa, conto os dias.",
-  "O universo conspirou para te dar essa cor.",
-  "Seu gosto define a beleza deste lugar.",
-  "Na sua cor, encontro a paz que sua ausência tirou."
+  "Roxo é a cor da saudade que tenho de você."
 ];
 
 export const QUOTES: string[] = [
@@ -104,7 +290,115 @@ export const QUOTES: string[] = [
   "Te esperar não é uma escolha, é uma necessidade da minha alma."
 ];
 
-export const FOOTER_QUOTES: string[] = [
+// NOVAS FRASES (60% de chance)
+export const FRESH_QUOTES: string[] = [
+  // Novas Frases Adicionadas Recentemente
+  "Agora que você chegou, o resto é detalhe.",
+  "Tem coisa que só faz sentido quando acontece perto.",
+  "A distância acabou. O efeito colateral começa agora.",
+  "Algumas presenças não cabem na tela.",
+  "O tempo parou de contar. Agora sente.",
+  "O que era ideia virou intenção.",
+  "Não atualiza a página. Se aproxima.",
+  "Tem silêncio que pede menos texto e mais você.",
+  "Ao vivo, tudo ganha outra camada.",
+  "A espera foi longa. O momento não vai ser.",
+  "Algumas promessas não precisam ser ditas.",
+  "O que vem depois é melhor sem roteiro.",
+  "A parte interessante começa fora do site.",
+  "Menos palavras. Mais proximidade.",
+  "O contador zerou, mas a vontade não.",
+  "Agora é presença sem legenda.",
+  "O tempo fez a parte dele. Agora é com a gente.",
+  "Nem tudo precisa ser explicado quando é sentido.",
+  "A tela cumpriu seu papel. Agora é você.",
+
+  // Indiretas & Provocativas
+  "Tem gente que chega devagar. Você chega bagunçando tudo.",
+  "Não é saudade, é só o corpo lembrando do que é bom.",
+  "Tem silêncio que provoca mais do que palavra.",
+  "Se intenção fosse visível, você já teria sido presa.",
+  "Não prometo juízo quando você sorri desse jeito.",
+  "Às vezes não é carência. É lembrança bem localizada.",
+  "Tem gente que beija com a boca. Outras com a presença.",
+  "Se você soubesse o efeito colateral que causa…",
+  "Não era convite. Mas você sempre entendeu assim.",
+  "Alguns pensamentos não são impróprios — só mal comportados.",
+  "A cidade fica pequena quando você passa perto.",
+  "Tem coisa que não se diz. Se aproxima.",
+  "Eu até tento ser educado, mas você não colabora.",
+  "Não é provocação. É talento natural.",
+  "Cuidado: proximidade excessiva pode gerar consequências.",
+  "Tem olhar que não pede permissão.",
+  "Você não é distração. É interrupção.",
+  "Nem tudo que esquenta precisa ser explicado.",
+  "Se isso fosse coincidência, seria insistente demais.",
+  "Tem conversa que começa inocente e termina interessante.",
+  "Anna, você tem um jeito perigoso de parecer tranquila.",
+  "Anna, sua calma não combina com o efeito que causa.",
+  "Anna, você não chega — você acontece.",
+  "Tem gente que tira o sono. Outras tiram a calma.",
+  "Não era pra ser intenso, mas você estava envolvida.",
+  "Tem sorriso que convida sem dizer nada.",
+  "Não confunda paciência com falta de vontade.",
+  "Tem ideia que nasce errada… e deliciosa.",
+  "Você não testa limites. Você redefine.",
+  "Às vezes o problema é pensar demais em você.",
+  "Não é charme. É estratégia inconsciente.",
+  "Se fosse só curiosidade, já tinha passado.",
+  "Tem clima que não pede legenda.",
+  "Anna, você devia vir com aviso.",
+  "Não cheguei perto por educação. Me afastei por autocontrole.",
+  "Tem presença que pesa mais que toque.",
+  "Não era flerte. Mas se foi, funcionou.",
+  "Você não provoca. Você sugere.",
+  "Certas intenções gostam de companhia.",
+  "Não sou direto. Mas você entende rápido.",
+  "Anna, você complica minha versão comportada.",
+  "Tem desejo que sabe esperar.",
+  "Você não desarruma. Você organiza o caos.",
+  "Algumas ideias ficam melhores à noite.",
+  "Não é tensão. É sintonia mal resolvida.",
+  "Anna, seu nome combina com segundas intenções.",
+  "Não me olha assim se não quiser resposta.",
+  "Tem atração que dispensa explicação.",
+  "Se eu chegar mais perto, não foi por acaso.",
+  "Algumas vontades não pedem permissão — só tempo.",
+
+  // Panetone de Tortuguita
+  "Não é suborno. É um panetone de Tortuguita entregue com intenção.",
+  "Se eu aparecer com um panetone de Tortuguita, finja surpresa.",
+  "Alguns presentes não pedem ocasião. Só coragem.",
+  "Tem coisa que não se explica. Se entrega.",
+  "Não é Natal. É só vontade de te ver sorrir.",
+  "Panetone de Tortuguita não resolve tudo… mas ajuda bastante.",
+
+  // Tinder -> Nós
+  "Talvez seja o caso de largar o Tinder e investir em algo com mais potencial.",
+  "Tem match que cansa. Tem gente que vale o investimento.",
+  "Entre deslizar pra direita e te encontrar, a escolha é óbvia.",
+  "Alguns algoritmos não competem com presença.",
+  "Não é exclusividade. É prioridade.",
+  "Tem conexão que não precisa de aplicativo.",
+
+  // Locais & Vibes
+  "Cafeteria, mesa pequena e conversa longa. Combina com você.",
+  "Tem encontro que começa com café e termina com planos.",
+  "Café forte, papo melhor ainda.",
+  "Algumas conversas pedem xícara na mão.",
+  "Você olhando uma obra no museu e explicando algo que ninguém perguntou.",
+  "Museu é só desculpa pra andar devagar e conversar.",
+  "Tem arte que fica na parede. Outras sentam do seu lado.",
+  "Um dia na Pampulha, sol leve e você reclamando do calor.",
+  "Caminhar sem pressa, rir sem motivo na orla.",
+  "A Pampulha fica melhor quando você aparece.",
+  "CCBB, exposição estranha e você fingindo entender tudo.",
+  "Não é sobre a arte. É sobre o comentário depois.",
+  "Alguns passeios rendem mais conversa do que foto."
+];
+
+// FRASES CLÁSSICAS (40% de chance)
+export const CLASSIC_QUOTES: string[] = [
   "Algumas pessoas não se esquecem. Se esperam.",
   "O amor sabe contar as horas até o reencontro.",
   "Distância é apenas um detalhe quando a alma está perto.",
@@ -112,25 +406,16 @@ export const FOOTER_QUOTES: string[] = [
   "O tempo não apaga o que o coração gravou.",
   "Minha saudade tem nome e sobrenome.",
   "Em breve, o silêncio será preenchido por nós.",
-  
-  // Poemas Curtos
   "A noite passa, eu fico, você insiste.",
   "Não te escrevo pra não te ter só aqui.",
   "A distância não esfria. Ela concentra.",
   "O silêncio ficou grande desde que você saiu.",
   "Se te esquecer fosse fácil, eu já teria tentado.",
-
-  // Provocativas
-  "Pensar em você sempre passa do limite.",
-  "A distância deixa a gente mais honesto.",
-  "Tem saudade que não cabe em conversa.",
   "Eu me controlo… até lembrar de você.",
   "O problema não é a distância, é a imaginação.",
   "Te querer de longe é um risco diário.",
   "A ausência não é neutra.",
   "Algumas vontades pedem silêncio.",
-
-  // Românticas Profundas
   "Você virou referência.",
   "Tem gente que muda o ritmo do tempo.",
   "Não te procuro, te reconheço.",
@@ -139,8 +424,6 @@ export const FOOTER_QUOTES: string[] = [
   "Nem todo amor precisa de presença constante.",
   "O tempo não diminuiu. Só confirmou.",
   "Você ainda é o lugar onde eu volto.",
-
-  // Solidão Estética
   "A casa ficou grande demais.",
   "A madrugada me conhece.",
   "O silêncio aprendeu meu nome.",
@@ -148,8 +431,6 @@ export const FOOTER_QUOTES: string[] = [
   "A ausência tem peso.",
   "A noite sempre entrega.",
   "Algumas faltas não passam.",
-
-  // Brincalhonas / Emocionais
   "Atualização: ainda pensando.",
   "Prometi não pensar. Falhei.",
   "Distância: 1 / Eu: 0",
@@ -157,8 +438,6 @@ export const FOOTER_QUOTES: string[] = [
   "Status emocional: instável.",
   "Fingindo maturidade com sucesso duvidoso.",
   "Essa saudade já virou hábito.",
-
-  // Alusões
   "Toda boa história tem um intervalo.",
   "A gente ainda está no ato dois.",
   "Tem coisas que só funcionam no tempo certo.",
@@ -167,8 +446,6 @@ export const FOOTER_QUOTES: string[] = [
   "A distância também é narrativa.",
   "O final ainda não foi escrito.",
   "Tem histórias que precisam de pausa.",
-
-  // Filosóficas
   "Esperar também é agir.",
   "Sentir não é perda de tempo.",
   "O que permanece não depende.",
@@ -176,8 +453,6 @@ export const FOOTER_QUOTES: string[] = [
   "Distância não apaga intenção.",
   "O tempo não ensina, revela.",
   "A ausência também comunica.",
-
-  // Música
   "Essa música sabe demais.",
   "Difícil ouvir sem lembrar.",
   "Volume alto pra não pensar.",
@@ -185,8 +460,6 @@ export const FOOTER_QUOTES: string[] = [
   "Algumas músicas atravessam.",
   "Essa não respeita distância.",
   "Essa toca onde falta.",
-
-  // Encerramento
   "Algumas pessoas valem a espera.",
   "O tempo não levou.",
   "Ainda aqui.",

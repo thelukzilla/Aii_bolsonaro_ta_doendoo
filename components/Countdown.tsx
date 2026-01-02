@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { TimeLeft } from '../types';
 import { TARGET_DATE } from '../constants';
 
-const Countdown: React.FC = () => {
+interface CountdownProps {
+  onComplete?: () => void;
+}
+
+const Countdown: React.FC<CountdownProps> = ({ onComplete }) => {
   const calculateTimeLeft = (): TimeLeft => {
     const difference = +new Date(TARGET_DATE) - +new Date();
     let timeLeft: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -19,14 +23,27 @@ const Countdown: React.FC = () => {
   };
 
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+  const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      const difference = +new Date(TARGET_DATE) - +new Date();
+      
+      if (difference <= 0) {
+        // Time is up
+        clearInterval(timer);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        if (!isFinished) {
+            setIsFinished(true);
+            if (onComplete) onComplete();
+        }
+      } else {
+        setTimeLeft(calculateTimeLeft());
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isFinished, onComplete]);
 
   const TimeUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
     <div className="flex flex-col items-center mx-2 sm:mx-4">

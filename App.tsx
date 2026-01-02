@@ -1,16 +1,20 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Heart, Moon, Shuffle, Crown } from 'lucide-react';
+import { Heart, Moon, Shuffle, Crown, Stars } from 'lucide-react';
 import Countdown from './components/Countdown';
 import MusicPlayer from './components/MusicPlayer';
 import DailyQuote from './components/DailyQuote';
 import EmotionalStatus from './components/EmotionalStatus';
-import { FOOTER_QUOTES, PURPLE_QUOTES, TIME_GREETINGS, HIDDEN_MESSAGES, TARGET_DATE, THEMES } from './constants';
+import FinalCards from './components/FinalCards';
+import { FRESH_QUOTES, CLASSIC_QUOTES, PURPLE_QUOTES, FINALE_QUOTES, TIME_GREETINGS, HIDDEN_MESSAGES, TARGET_DATE, THEMES } from './constants';
 
 const App: React.FC = () => {
   const [hasEntered, setHasEntered] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [showHidden, setShowHidden] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // State for Finale
+  const [isFinished, setIsFinished] = useState(false);
   
   // Theme and Quote State
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
@@ -21,10 +25,37 @@ const App: React.FC = () => {
   // Lógica para detectar se é o tema exclusivo (Roxo)
   const isPurpleTheme = theme.name === "O Mundo Dela";
 
+  // Helper to pick a quote based on current theme and weighted probability
+  const getWeightedQuote = (isPurple: boolean) => {
+    // 1. Se for tema Roxo, SEMPRE usa frases roxas.
+    if (isPurple) {
+        const randomIndex = Math.floor(Math.random() * PURPLE_QUOTES.length);
+        return PURPLE_QUOTES[randomIndex];
+    }
+    
+    // 2. Se for outro tema, 60% chance de FRESH, 40% chance de CLASSIC
+    const useFresh = Math.random() < 0.6;
+    const sourceArray = useFresh ? FRESH_QUOTES : CLASSIC_QUOTES;
+    const randomIndex = Math.floor(Math.random() * sourceArray.length);
+    return sourceArray[randomIndex];
+  };
+
+  // Trigger when countdown ends or preview is clicked
+  const handleFinish = () => {
+    setIsFinished(true);
+    // Force switch to Purple Theme if not already
+    const purpleIndex = THEMES.findIndex(t => t.name === "O Mundo Dela");
+    if (purpleIndex !== -1) {
+        setCurrentThemeIndex(purpleIndex);
+    }
+    // Set a specific finale quote
+    const randomFinaleQuote = FINALE_QUOTES[Math.floor(Math.random() * FINALE_QUOTES.length)];
+    setCurrentFooterQuote(randomFinaleQuote);
+  };
+
   // Initialize random footer quote on mount
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * FOOTER_QUOTES.length);
-    setCurrentFooterQuote(FOOTER_QUOTES[randomIndex]);
+    setCurrentFooterQuote(getWeightedQuote(isPurpleTheme));
   }, []);
 
   // Handler to change theme and quote simultaneously
@@ -36,14 +67,19 @@ const App: React.FC = () => {
     setCurrentThemeIndex(nextIndex);
     
     // Check if next theme is the Exclusive Purple theme
-    const nextIsPurple = THEMES[nextIndex].name === "O Mundo Dela";
+    const nextTheme = THEMES[nextIndex];
+    const nextIsPurple = nextTheme.name === "O Mundo Dela";
     
-    // Pick quote based on theme
-    const sourceArray = nextIsPurple ? PURPLE_QUOTES : FOOTER_QUOTES;
-    const randomIndex = Math.floor(Math.random() * sourceArray.length);
-    
-    setCurrentFooterQuote(sourceArray[randomIndex]);
+    // Pick quote based on theme and weight
+    setCurrentFooterQuote(getWeightedQuote(nextIsPurple));
   };
+
+  // Handler just for quotes when Finished (Theme Locked)
+  const handleNewFinaleQuote = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const randomIndex = Math.floor(Math.random() * FINALE_QUOTES.length);
+    setCurrentFooterQuote(FINALE_QUOTES[randomIndex]);
+  }
 
   // 1. Time Logic for Greetings & Night Mode (Brasilia UTC-3)
   const brasiliaHour = useMemo(() => {
@@ -56,11 +92,12 @@ const App: React.FC = () => {
   }, [currentTime]);
 
   const timeGreeting = useMemo(() => {
+    if (isFinished) return "Bem-vinda ao nosso caos.";
     if (isPurpleTheme) return "O roxo te veste tão bem quanto a minha saudade.";
     if (brasiliaHour >= 5 && brasiliaHour < 12) return TIME_GREETINGS.morning;
     if (brasiliaHour >= 12 && brasiliaHour < 18) return TIME_GREETINGS.afternoon;
     return TIME_GREETINGS.night;
-  }, [brasiliaHour, isPurpleTheme]);
+  }, [brasiliaHour, isPurpleTheme, isFinished]);
 
   const isNight = brasiliaHour >= 18 || brasiliaHour < 5;
 
@@ -94,7 +131,7 @@ const App: React.FC = () => {
   }, [hasEntered]);
 
   const handleGlobalClick = () => {
-    if (!showHidden) {
+    if (!showHidden && !isFinished) { // Disable hidden message clicks in finale
         const newCount = clickCount + 1;
         setClickCount(newCount);
         if (newCount >= 3) setShowHidden(true);
@@ -146,15 +183,29 @@ const App: React.FC = () => {
 
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pb-24">
         
-        {/* New Phrase / Atmosphere Button */}
-        <div className="absolute top-8 right-8 z-50">
-            <button 
-                onClick={handleNewAtmosphere}
-                className={`flex items-center gap-2 text-xs uppercase tracking-widest ${theme.textMuted} hover:${theme.textMain} transition-colors group`}
-            >
-                <Shuffle size={14} className="group-hover:rotate-180 transition-transform duration-500" /> 
-                Nova Atmosfera
-            </button>
+        {/* Top Right Controls */}
+        <div className="absolute top-8 right-8 z-50 flex flex-col items-end gap-3">
+            {/* Standard Theme Switcher - Hidden when Finished */}
+            {!isFinished && (
+                <button 
+                    onClick={handleNewAtmosphere}
+                    className={`flex items-center gap-2 text-xs uppercase tracking-widest ${theme.textMuted} hover:${theme.textMain} transition-colors group`}
+                >
+                    <Shuffle size={14} className="group-hover:rotate-180 transition-transform duration-500" /> 
+                    <span className="hidden sm:inline">Nova Atmosfera</span>
+                </button>
+            )}
+
+            {/* Finale Quote Switcher - Visible ONLY when Finished */}
+            {isFinished && (
+                <button 
+                    onClick={handleNewFinaleQuote}
+                    className={`flex items-center gap-2 text-xs uppercase tracking-widest text-purple-300/60 hover:text-purple-100 transition-colors group`}
+                >
+                    <Stars size={14} className="group-hover:spin-slow transition-transform" /> 
+                    <span className="hidden sm:inline">Nova Frase</span>
+                </button>
+            )}
         </div>
 
         {/* Content Wrapper */}
@@ -162,69 +213,91 @@ const App: React.FC = () => {
             
             {/* Header */}
             <header className="mb-8 text-center animate-in slide-in-from-top duration-1000">
-            <div className={`inline-flex items-center gap-2 mb-4 ${theme.accentText} opacity-80`}>
-                {/* 3. Icon: Heart usually, Crown if Purple Theme */}
+                <div className={`inline-flex items-center gap-2 mb-4 ${theme.accentText} opacity-80`}>
+                    {/* 3. Icon: Heart usually, Crown if Purple Theme */}
+                    {isPurpleTheme ? (
+                    <Crown size={20} fill="currentColor" className="heartbeat-icon text-yellow-500/80 drop-shadow-glow" />
+                    ) : (
+                    <Heart size={16} fill="currentColor" className="heartbeat-icon" />
+                    )}
+                </div>
+                
+                {/* Title changes based on Theme */}
                 {isPurpleTheme ? (
-                  <Crown size={20} fill="currentColor" className="heartbeat-icon text-yellow-500/80 drop-shadow-glow" />
+                <h1 className="font-serif-display italic text-4xl md:text-6xl tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-fuchsia-200 to-purple-200 animate-pulse">
+                    Minha Anna
+                </h1>
                 ) : (
-                  <Heart size={16} fill="currentColor" className="heartbeat-icon" />
+                <h1 className="font-cinzel text-3xl md:text-5xl tracking-widest mb-2">
+                    ANNA BEATRIZ
+                </h1>
                 )}
-            </div>
-            
-            {/* Title changes based on Theme */}
-            {isPurpleTheme ? (
-              <h1 className="font-serif-display italic text-4xl md:text-6xl tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-200 via-fuchsia-200 to-purple-200 animate-pulse">
-                Minha Anna
-              </h1>
-            ) : (
-              <h1 className="font-cinzel text-3xl md:text-5xl tracking-widest mb-2">
-                ANNA BEATRIZ
-              </h1>
-            )}
 
-            <p className={`font-light ${theme.textMuted} tracking-[0.3em] text-xs md:text-sm uppercase mb-6`}>
-                {timeGreeting}
-            </p>
+                <p className={`font-light ${theme.textMuted} tracking-[0.3em] text-xs md:text-sm uppercase mb-6`}>
+                    {timeGreeting}
+                </p>
             </header>
 
-            {/* Countdown Section */}
-            <section className={`w-full max-w-4xl mx-auto backdrop-blur-sm rounded-2xl p-6 md:p-12 shadow-2xl transition-all duration-1000 ${isPurpleTheme ? 'bg-fuchsia-950/20 border border-purple-500/20 shadow-purple-900/30' : 'bg-black/10 border border-white/5 shadow-black/50'}`}>
-            <Countdown />
-            
-            <div className="flex flex-col items-center mt-8 gap-4">
-                <div className="text-center">
-                    <p className={`text-xs ${theme.textMuted} uppercase tracking-widest mb-1`}>
-                      {isPurpleTheme ? "Nosso reencontro real" : "Data oficial"}
-                    </p>
-                    <p className={`font-serif-display italic opacity-80`}>07 de Janeiro de 2026</p>
-                </div>
+            {/* CONDITIONAL RENDERING: Countdown OR Final Cards */}
+            {!isFinished ? (
+                <>
+                    {/* Countdown Section */}
+                    <section className={`w-full max-w-4xl mx-auto backdrop-blur-sm rounded-2xl p-6 md:p-12 shadow-2xl transition-all duration-1000 ${isPurpleTheme ? 'bg-fuchsia-950/20 border border-purple-500/20 shadow-purple-900/30' : 'bg-black/10 border border-white/5 shadow-black/50'}`}>
+                        <Countdown onComplete={handleFinish} />
+                        
+                        <div className="flex flex-col items-center mt-8 gap-4">
+                            <div className="text-center">
+                                <p className={`text-xs ${theme.textMuted} uppercase tracking-widest mb-1`}>
+                                {isPurpleTheme ? "Nosso reencontro real" : "Data oficial"}
+                                </p>
+                                <p className={`font-serif-display italic opacity-80`}>07 de Janeiro de 2026</p>
+                            </div>
 
-                {/* 5. Nights Counter (Only visible at night OR if it's the Purple Theme because it's emotional) */}
-                {(isNight || isPurpleTheme) && (
-                    <div className={`mt-4 flex items-center gap-2 ${theme.accentText} animate-in fade-in duration-1000 opacity-60`}>
-                        <Moon size={14} />
-                        <span className="text-sm font-serif-display italic tracking-wide">
-                            Faltam {nightsLeft} noites {isPurpleTheme ? "sonhando com você" : "solitárias"}
-                        </span>
+                            {/* Nights Counter (Only visible at night OR if it's the Purple Theme) */}
+                            {(isNight || isPurpleTheme) && (
+                                <div className={`mt-4 flex items-center gap-2 ${theme.accentText} animate-in fade-in duration-1000 opacity-60`}>
+                                    <Moon size={14} />
+                                    <span className="text-sm font-serif-display italic tracking-wide">
+                                        Faltam {nightsLeft} noites {isPurpleTheme ? "sonhando com você" : "solitárias"}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+
+                    {/* Emotional Weather */}
+                    <EmotionalStatus isFinished={isFinished} />
+
+                    {/* Daily Quote Section */}
+                    <section className="mt-12 w-full animate-in slide-in-from-bottom duration-1000 delay-300">
+                        <DailyQuote />
+                    </section>
+                </>
+            ) : (
+                /* FINAL STATE UI */
+                <div className="w-full mt-8 animate-in zoom-in duration-1000 ease-out">
+                    <FinalCards />
+                    
+                    <div className="mt-12 text-center opacity-80 animate-in fade-in slide-in-from-bottom duration-1000 delay-500">
+                        <EmotionalStatus isFinished={isFinished} />
+                        <div className="mt-8">
+                            <p className="text-purple-200/50 text-xs uppercase tracking-widest mb-2">Status Atual</p>
+                            <p className="text-purple-100 font-serif-display italic text-lg">
+                                Vivendo o extraordinário.
+                            </p>
+                        </div>
                     </div>
-                )}
-            </div>
-            </section>
+                </div>
+            )}
 
-            {/* 6. Emotional Weather */}
-            <EmotionalStatus />
-
-            {/* Daily Quote Section */}
-            <section className="mt-12 w-full animate-in slide-in-from-bottom duration-1000 delay-300">
-            <DailyQuote />
-            </section>
-
-            {/* 7. Hidden Message */}
-            <div className={`mt-8 h-8 flex items-center justify-center transition-opacity duration-1000 ${showHidden ? 'opacity-100' : 'opacity-0'}`}>
-                <p className={`text-xs ${theme.accentText} font-serif-display italic tracking-widest opacity-70`}>
-                    {randomHiddenMessage}
-                </p>
-            </div>
+            {/* Hidden Message (Only if NOT finished) */}
+            {!isFinished && (
+                <div className={`mt-8 h-8 flex items-center justify-center transition-opacity duration-1000 ${showHidden ? 'opacity-100' : 'opacity-0'}`}>
+                    <p className={`text-xs ${theme.accentText} font-serif-display italic tracking-widest opacity-70`}>
+                        {randomHiddenMessage}
+                    </p>
+                </div>
+            )}
 
             {/* Fixed Footer Text (Dynamic) */}
             <footer className="mt-12 text-center opacity-60 hover:opacity-100 transition-opacity duration-500 px-4">
