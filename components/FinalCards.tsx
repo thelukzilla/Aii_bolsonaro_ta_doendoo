@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronRight, RefreshCw, Star, MapPin, Beer, MessageCircleHeart } from 'lucide-react';
 import { FINAL_CARDS } from '../constants';
-import { CardData } from '../types';
 
 const FinalCards: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);

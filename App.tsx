@@ -76,13 +76,6 @@ const App: React.FC = () => {
     setCurrentFooterQuote(getWeightedQuote(nextIsPurple));
   };
 
-  // Handler just for quotes when Finished (Theme Locked)
-  const handleNewFinaleQuote = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const randomIndex = Math.floor(Math.random() * FINALE_QUOTES.length);
-    setCurrentFooterQuote(FINALE_QUOTES[randomIndex]);
-  }
-
   // 1. Time Logic for Greetings & Night Mode (Brasilia UTC-3)
   const brasiliaHour = useMemo(() => {
     // Get current time in UTC
