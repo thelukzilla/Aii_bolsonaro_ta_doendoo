@@ -31,4 +31,5 @@ export interface CardData {
   title: string;
   text: string;
   icon?: string; // Optional icon identifier if needed
+  imageUrl?: string; // Optional image URL for memes/photos
 }

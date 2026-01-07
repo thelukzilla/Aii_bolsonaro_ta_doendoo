@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { ChevronRight, RefreshCw, Star, MapPin, Beer, MessageCircleHeart } from 'lucide-react';
 import { FINAL_CARDS } from '../constants';
+import { CardData } from '../types';
 
 const FinalCards: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const cards = FINAL_CARDS;
 
   const handleNext = () => {
-    // Cycle: 0 -> ... -> last_card -> special_message -> 0
-    setActiveIndex((prev) => (prev + 1) % (FINAL_CARDS.length + 1));
+    setActiveIndex((prev) => (prev + 1) % (cards.length + 1));
   };
 
-  const isSpecialMessage = activeIndex === FINAL_CARDS.length;
-  const currentCard = !isSpecialMessage ? FINAL_CARDS[activeIndex] : null;
-  const isLastCard = activeIndex === FINAL_CARDS.length - 1;
+  const isSpecialMessage = activeIndex === cards.length;
+  const currentCard = !isSpecialMessage ? cards[activeIndex] : null;
+  const isLastCard = activeIndex === cards.length - 1;
 
-  // Function to get a random playful icon for decoration
+  // Função para ícones decorativos
   const getIcon = (index: number) => {
     const icons = [MapPin, Beer, Star, RefreshCw]; 
     const Icon = icons[index % icons.length];
@@ -50,29 +51,42 @@ const FinalCards: React.FC = () => {
                 <>
                     <div className="flex items-center gap-2 mb-4">
                         <span className="text-[10px] uppercase tracking-[0.3em] text-purple-300/60 font-medium">
-                            Card {activeIndex + 1} / {FINAL_CARDS.length}
+                            Card {activeIndex + 1} / {cards.length}
                         </span>
                         {getIcon(activeIndex)}
                     </div>
 
-                    <div className="flex-1 flex flex-col justify-center animate-in slide-in-from-right fade-in duration-500 key={activeIndex}">
-                        <h3 className="font-serif-display text-2xl md:text-3xl text-purple-100 mb-6 leading-tight italic">
-                            {currentCard?.title}
-                        </h3>
-                        <p className="font-light text-slate-300 leading-relaxed text-sm md:text-base">
+                    <div className="flex-1 flex flex-col justify-center animate-in slide-in-from-right fade-in duration-500 key={activeIndex} w-full">
+                        {/* Se tiver imagem */}
+                        {currentCard?.imageUrl ? (
+                           <div className="w-full h-56 mb-2 relative rounded-lg overflow-hidden border border-purple-500/20 shadow-lg bg-black/40">
+                              <img 
+                                src={currentCard.imageUrl} 
+                                alt={currentCard.title} 
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-contain object-center transform hover:scale-105 transition-transform duration-700"
+                              />
+                           </div>
+                        ) : (
+                           <h3 className="font-serif-display text-2xl md:text-3xl text-purple-100 mb-6 leading-tight italic">
+                                {currentCard?.title}
+                           </h3>
+                        )}
+                        
+                        <p className={`font-light leading-relaxed ${currentCard?.imageUrl ? 'text-lg font-bold text-red-400 drop-shadow-md' : 'text-slate-300 text-sm md:text-base'}`}>
                             "{currentCard?.text}"
                         </p>
                     </div>
 
                     <div className="mt-8 flex flex-col items-center gap-2">
-                        <span className="text-xs text-purple-400/50 uppercase tracking-widest animate-pulse">
-                            {isLastCard ? "Última mensagem..." : "Toque para o próximo"}
-                        </span>
-                        <ChevronRight size={20} className={`text-purple-400/50 transition-transform duration-300 ${isLastCard ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
+                        <p className="text-[10px] text-purple-400/50 text-center px-4 uppercase tracking-widest">
+                            Toque para o próximo
+                        </p>
+                        <ChevronRight size={20} className={`text-purple-400/30 mt-2 transition-transform duration-300 ${isLastCard ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
                     </div>
                 </>
             ) : (
-                /* SPECIAL WHATSAPP MESSAGE CONTENT */
+                /* WHATSAPP MESSAGE CONTENT (Final Screen) */
                 <div className="flex-1 flex flex-col justify-center items-center animate-in zoom-in fade-in duration-700 w-full">
                     <div className="mb-6 text-purple-400 animate-bounce-slow">
                         <MessageCircleHeart size={32} />

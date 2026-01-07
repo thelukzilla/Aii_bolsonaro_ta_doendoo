@@ -1,10 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Heart, Moon, Shuffle, Crown, Stars } from 'lucide-react';
+import { Heart, Moon, Shuffle, Crown, Stars, Sparkles } from 'lucide-react';
 import Countdown from './components/Countdown';
 import MusicPlayer from './components/MusicPlayer';
 import DailyQuote from './components/DailyQuote';
 import EmotionalStatus from './components/EmotionalStatus';
 import FinalCards from './components/FinalCards';
+import QuoteArchive from './components/QuoteArchive';
+import PoemSection from './components/PoemSection';
 import { FRESH_QUOTES, CLASSIC_QUOTES, PURPLE_QUOTES, FINALE_QUOTES, TIME_GREETINGS, HIDDEN_MESSAGES, TARGET_DATE, THEMES } from './constants';
 
 const App: React.FC = () => {
@@ -40,7 +42,7 @@ const App: React.FC = () => {
     return sourceArray[randomIndex];
   };
 
-  // Trigger when countdown ends or preview is clicked
+  // Trigger when countdown ends
   const handleFinish = () => {
     setIsFinished(true);
     // Force switch to Purple Theme if not already
@@ -92,7 +94,7 @@ const App: React.FC = () => {
   }, [currentTime]);
 
   const timeGreeting = useMemo(() => {
-    if (isFinished) return "Bem-vinda ao nosso caos.";
+    if (isFinished) return "A espera acabou.";
     if (isPurpleTheme) return "O roxo te veste tão bem quanto a minha saudade.";
     if (brasiliaHour >= 5 && brasiliaHour < 12) return TIME_GREETINGS.morning;
     if (brasiliaHour >= 12 && brasiliaHour < 18) return TIME_GREETINGS.afternoon;
@@ -169,22 +171,23 @@ const App: React.FC = () => {
       {/* 4. Grain/Noise Overlay */}
       <div className="noise-overlay"></div>
 
-      {/* Improved Heartbeat Background Effect */}
+      {/* Improved Heartbeat Background Effect - Intensified for Finale */}
       <div className="fixed inset-0 pointer-events-none transition-all duration-1000">
-         {/* Central beating heart core - Larger and glowier if Purple Theme */}
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full animate-heartbeat-bg ${theme.accentBg} ${isPurpleTheme ? 'w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] blur-[120px] opacity-40' : 'w-[40vw] h-[40vw] md:w-[25vw] md:h-[25vw] blur-[100px]'}`}></div>
+         {/* Central beating heart core */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full animate-heartbeat-bg ${theme.accentBg} ${isFinished ? 'w-[70vw] h-[70vw] md:w-[50vw] md:h-[50vw] blur-[140px] opacity-30' : (isPurpleTheme ? 'w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] blur-[120px] opacity-40' : 'w-[40vw] h-[40vw] md:w-[25vw] md:h-[25vw] blur-[100px]')}`}></div>
         
         {/* Secondary ambient glow */}
         <div className={`absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full blur-[150px] pulse-slow opacity-20 ${theme.accentBg}`} style={{ animationDelay: '2s' }}></div>
         
-        {/* Vignette */}
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,${theme.bgClass.replace('bg-', '#')}99_100%)]`}></div>
+        {/* Vignette - Stronger in Finale for focus */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,${theme.bgClass.replace('bg-', '#')}99_100%)] ${isFinished ? 'scale-110 opacity-80' : ''}`}></div>
       </div>
 
-      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pb-24">
+      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pb-32">
         
         {/* Top Right Controls */}
         <div className="absolute top-8 right-8 z-50 flex flex-col items-end gap-3">
+            
             {/* Standard Theme Switcher - Hidden when Finished */}
             {!isFinished && (
                 <button 
@@ -195,24 +198,13 @@ const App: React.FC = () => {
                     <span className="hidden sm:inline">Nova Atmosfera</span>
                 </button>
             )}
-
-            {/* Finale Quote Switcher - Visible ONLY when Finished */}
-            {isFinished && (
-                <button 
-                    onClick={handleNewFinaleQuote}
-                    className={`flex items-center gap-2 text-xs uppercase tracking-widest text-purple-300/60 hover:text-purple-100 transition-colors group`}
-                >
-                    <Stars size={14} className="group-hover:spin-slow transition-transform" /> 
-                    <span className="hidden sm:inline">Nova Frase</span>
-                </button>
-            )}
         </div>
 
         {/* Content Wrapper */}
         <div className="transition-all duration-1000 w-full flex flex-col items-center">
             
-            {/* Header */}
-            <header className="mb-8 text-center animate-in slide-in-from-top duration-1000">
+            {/* Header - Simpler in Finale to give focus to content */}
+            <header className={`mb-8 text-center animate-in slide-in-from-top duration-1000 ${isFinished ? 'mt-12 scale-90 opacity-80' : ''}`}>
                 <div className={`inline-flex items-center gap-2 mb-4 ${theme.accentText} opacity-80`}>
                     {/* 3. Icon: Heart usually, Crown if Purple Theme */}
                     {isPurpleTheme ? (
@@ -267,26 +259,73 @@ const App: React.FC = () => {
 
                     {/* Emotional Weather */}
                     <EmotionalStatus isFinished={isFinished} />
-
-                    {/* Daily Quote Section */}
-                    <section className="mt-12 w-full animate-in slide-in-from-bottom duration-1000 delay-300">
+                    
+                    {/* Daily Quote (Restored during countdown) */}
+                    <div className="mt-12 w-full animate-in slide-in-from-bottom duration-1000 delay-300">
                         <DailyQuote />
-                    </section>
+                    </div>
                 </>
             ) : (
-                /* FINAL STATE UI */
-                <div className="w-full mt-8 animate-in zoom-in duration-1000 ease-out">
-                    <FinalCards />
+                /* ================================================= */
+                /*             FINAL STATE UI (Redesigned)           */
+                /* ================================================= */
+                <div className="w-full mt-4 animate-in zoom-in duration-1000 ease-out flex flex-col items-center relative z-20">
                     
-                    <div className="mt-12 text-center opacity-80 animate-in fade-in slide-in-from-bottom duration-1000 delay-500">
-                        <EmotionalStatus isFinished={isFinished} />
-                        <div className="mt-8">
-                            <p className="text-purple-200/50 text-xs uppercase tracking-widest mb-2">Status Atual</p>
-                            <p className="text-purple-100 font-serif-display italic text-lg">
-                                Vivendo o extraordinário.
+                    {/* Decorative Background Glow just for content */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[120%] bg-gradient-to-b from-fuchsia-950/10 via-purple-950/20 to-transparent blur-3xl -z-10 pointer-events-none"></div>
+
+                    {/* 1. Final Intro Message - Cinematic Header */}
+                    <div className="max-w-3xl mx-auto text-center p-10 bg-gradient-to-b from-purple-900/10 to-transparent rounded-[2rem] border-t border-purple-500/20 backdrop-blur-md mb-16 shadow-[0_0_50px_rgba(168,85,247,0.05)]">
+                        <div className="flex justify-center mb-6">
+                             <Stars className="text-fuchsia-300 animate-pulse" size={28} />
+                        </div>
+                        <h2 className="text-5xl md:text-7xl font-serif-display italic text-transparent bg-clip-text bg-gradient-to-r from-purple-100 via-fuchsia-100 to-purple-100 mb-8 drop-shadow-lg">
+                            Finalmente.
+                        </h2>
+                        <div className="space-y-4">
+                            <p className="text-xl md:text-2xl text-purple-100/90 leading-relaxed font-light font-serif-display">
+                                O contador parou. A espera acabou.
+                            </p>
+                            <div className="w-16 h-[1px] bg-purple-500/30 mx-auto"></div>
+                            <p className="text-lg text-purple-200/60 font-light">
+                                A partir de agora, não existe mais "lá".<br/>
+                                Só existe <span className="text-fuchsia-200 italic font-medium">"aqui"</span>.
                             </p>
                         </div>
+                        <div className="mt-10 transform hover:scale-105 transition-transform duration-500">
+                             <EmotionalStatus isFinished={isFinished} />
+                        </div>
                     </div>
+
+                    {/* 2. Quote Archive Section (Memories) - Floating Glass */}
+                    <section className="w-full mb-16">
+                        <QuoteArchive />
+                    </section>
+
+                    {/* 3. Poem Section (Dedicated) - Paper/Parchment feel */}
+                    <section className="w-full mb-16 relative">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-full bg-purple-600/5 blur-[80px] -z-10 rounded-full"></div>
+                        <PoemSection />
+                    </section>
+
+                    {/* 4. Special Header for Story Cards */}
+                    <div className="text-center mb-12 px-4 animate-in slide-in-from-bottom duration-1000 delay-500 relative">
+                        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"></div>
+                        <div className="relative inline-block bg-[#05000a] px-6 py-2 rounded-full border border-purple-500/10">
+                            <div className="flex justify-center items-center gap-3">
+                                <Sparkles className="text-fuchsia-400 animate-pulse" size={16} />
+                                <h3 className="font-serif-display text-xl md:text-2xl text-purple-100 italic">
+                                    "Foram 16 dias, 16 pensamentos"
+                                </h3>
+                                <Sparkles className="text-fuchsia-400 animate-pulse" size={16} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 5. Interactive Cards Section (Story Cards) */}
+                    <section className="w-full mb-12">
+                        <FinalCards />
+                    </section>
                 </div>
             )}
 
@@ -300,8 +339,12 @@ const App: React.FC = () => {
             )}
 
             {/* Fixed Footer Text (Dynamic) */}
-            <footer className="mt-12 text-center opacity-60 hover:opacity-100 transition-opacity duration-500 px-4">
-                <p className={`font-serif-display text-lg md:text-xl italic ${theme.textMuted} animate-in fade-in slide-in-from-bottom-2 duration-500`} key={currentFooterQuote}>
+            <footer className={`mt-auto text-center transition-all duration-1000 px-6 max-w-2xl mx-auto pb-12 ${isFinished ? 'opacity-90 scale-105' : 'opacity-60'}`}>
+                <div className={`w-full h-[1px] bg-gradient-to-r from-transparent ${isFinished ? 'via-fuchsia-500/30' : 'via-slate-800'} to-transparent mb-6`}></div>
+                <p 
+                    className={`font-serif-display text-lg md:text-xl italic animate-in fade-in slide-in-from-bottom-2 duration-500 leading-relaxed ${isFinished ? 'text-fuchsia-100 drop-shadow-[0_0_10px_rgba(192,38,211,0.3)]' : theme.textMuted}`} 
+                    key={currentFooterQuote}
+                >
                     “{currentFooterQuote}”
                 </p>
             </footer>

@@ -122,104 +122,93 @@ export const THEMES: Theme[] = [
   }
 ];
 
-// Cards exibidos após o fim do contador (Total: 16 cards)
+// Cards exibidos após o fim do contador (EXATAMENTE 16 CARDS)
 export const FINAL_CARDS: CardData[] = [
   {
     id: 1,
-    title: "O Começo",
-    text: "Dia 1. A cidade acordou igual, mas claramente menos interessante."
+    title: "Silêncio",
+    text: "16 dias de um silêncio estranho por aqui. Faltou a trilha sonora dos seus pensamentos aleatórios."
   },
   {
     id: 2,
-    title: "Street Food",
-    text: "Comer hambúrguer sozinho é possível. Gostoso não é. Você faz falta até na gordura."
+    title: "Geografia",
+    text: "Poços aproveitou a visita, mas já deu. BH ficou meio sem graça sem você."
   },
   {
     id: 3,
-    title: "A Regra",
-    text: "Pizza se come com a mão. Conversa boa se prolonga. E você nunca respeita o horário de ir embora."
+    title: "Sintonia",
+    text: "Foi muito bom conversar com você esses dias. Mesmo de longe, parece que a sintonia aumentou."
   },
   {
     id: 4,
-    title: "Vinho",
-    text: "Uma taça de vinho e você vira argumento forte. Eu perco qualquer debate."
+    title: "Personagem",
+    text: "É divertido demais acompanhar essa 'personagem' caótica e interessante chamada Anna Beatriz."
   },
   {
     id: 5,
-    title: "Fofoca",
-    text: "Fofoca não é lazer. É atividade social séria. Você trata como profissão."
+    title: "Playlist",
+    text: "Tocou Sarah Beatriz aqui e eu ri sozinho. Impossível não lembrar de você na hora."
   },
   {
     id: 6,
-    title: "Detetive",
-    text: "Você não ouve histórias. Você cruza dados. E geralmente acerta."
+    title: "Detalhes",
+    text: "Senti falta de ver esse nariz empinado reclamando de alguma coisa."
   },
   {
     id: 7,
-    title: "Ícone",
-    text: "Você se define como 🤡 mas o mundo reage como se fosse protagonista."
+    title: "Crime",
+    text: "Ficar 16 dias sem o seu nível de deboche deveria ser crime."
   },
   {
     id: 8,
-    title: "Clima Ideal",
-    text: "Ambiente abafado, banheiro duvidoso e gente suada falando alto? Você vai embora antes do segundo gole."
+    title: "O Game",
+    text: "Agora começa o 'game' de verdade. Boa sorte nas batalhas que vêm por aí."
   },
   {
     id: 9,
-    title: "Conforto",
-    text: "Cheiro de roupa limpa é seu equivalente a paz interior."
+    title: "Viagem",
+    text: "Torcendo pra viagem não ter sido ruim, já que eu sei o quanto você odeia ônibus."
   },
   {
     id: 10,
-    title: "Eficiência",
-    text: "Áudio longo é falta de educação. Você resolve no 2x e segue a vida."
+    title: "Histórias",
+    text: "Meus ouvidos sentiram falta de serem o depósito oficial das suas histórias."
   },
   {
     id: 11,
-    title: "Cabeça Perigosa",
-    text: "Palavras cruzadas, lógica afiada e um radar de mentira ativo 24h."
+    title: "Uber",
+    text: "Os motoristas de Uber de BH devem ter achado o trânsito quieto demais sem sua conversa."
   },
   {
     id: 12,
-    title: "Território",
-    text: "Maletta, Sapucaí, Mercado Novo… qualquer lugar vira casa quando você começa a falar."
+    title: "Semana",
+    text: "Passei esses 16 dias 'seguramente esperançoso' de que a semana passasse rápido."
   },
   {
     id: 13,
-    title: "Diva",
-    text: "Você chega no horário. O mundo que se atrasa."
+    title: "Melancolia",
+    text: "A gente ainda tá se conhecendo, mas se a melancolia bater, sabe onde me encontrar."
   },
   {
     id: 14,
-    title: "Valores",
-    text: "Gente grossa com garçom é o único tipo de red flag que você não ignora."
+    title: "Carreira",
+    text: "Ainda bem que você vai ser uma ótima advogada, porque vivendo de arte... a fome era certa."
   },
   {
     id: 15,
-    title: "Segredo",
-    text: "No meio do caos, do deboche e da falação… no fim, você só queria um cafuné."
+    title: "Dinâmica",
+    text: "No fim das contas, dá até uma saudadezinha dessa nossa dinâmica à distância."
   },
   {
     id: 16,
-    title: "Final",
-    text: "Os dias acabaram. A distância perdeu. Agora vem exercer o direito à falação presencial."
+    title: "O Caos",
+    text: "16 dias foi tempo demais. Que bom que o caos da vida te trouxe de volta pra perto."
   }
 ];
 
 // Frases exclusivas para o momento FINAL (Pós-Contador)
 export const FINALE_QUOTES: string[] = [
-  "O tempo de espera acabou. Agora é só tempo de viver.",
-  "Chega de contar dias. Vamos contar momentos.",
-  "A melhor notificação do mundo: 'Estou aqui'.",
-  "O abraço que valeu cada segundo de espera.",
-  "Fim da distância. Início da nossa vida.",
-  "O relógio parou para a gente começar.",
-  "Não existe mais 'lá'. Agora tudo é 'aqui'.",
-  "Finalmente, a tela virou pele.",
-  "Nós vencemos a geografia.",
-  "O som da sua voz sem delay é minha música favorita.",
-  "Promessa cumprida. Estamos juntos.",
-  "A saudade virou presença."
+  "Aproveitando o clima fofo, seu panetone ficou na casa da minha tia, e eu so busco no sabado (preguiça mesmo)"
 ];
 
 // Frases exclusivas para quando estiver no tema Roxo (Durante a espera)
